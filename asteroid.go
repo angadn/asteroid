@@ -7,6 +7,8 @@ import (
 	"os/exec"
 )
 
+// SIPHeaderWatch watches for SIP Debug messages and fires a callback for all calls
+// observed.
 type SIPHeaderWatch struct {
 	// Config
 	asteriskPath string
@@ -17,6 +19,8 @@ type SIPHeaderWatch struct {
 	readCloser io.ReadCloser
 }
 
+// NewSIPHeaderWatch for a set of headers to watch for, and a callback to run when a call
+// is observed.
 func NewSIPHeaderWatch(
 	headersToWatch []string,
 	callback func(callID string, headers map[string]string),
@@ -29,10 +33,12 @@ func NewSIPHeaderWatch(
 	return ret
 }
 
+// SetAsteriskPath to the Asterisk executable
 func (watch *SIPHeaderWatch) SetAsteriskPath(path string) {
 	watch.asteriskPath = path
 }
 
+// Start watching for headers.
 func (watch *SIPHeaderWatch) Start() {
 	cmd := exec.Command(watch.asteriskPath, "-r")
 
