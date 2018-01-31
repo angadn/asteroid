@@ -2,7 +2,6 @@ package asteroid_test
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 	"time"
 
@@ -14,7 +13,6 @@ func TestSIPHeaderWatch(t *testing.T) {
 	w := asteroid.NewSIPHeaderWatch([]string{"X-Twilio-CallSid", "X-Twilio-RecordingSid"}, func(
 		callID string, headers map[string]string,
 	) {
-		fmt.Printf("%v\n", headers)
 		if callID == "3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060" &&
 			headers["X-Twilio-CallSid"] == "CA23a4978e378035d1389c0838183e47d4" &&
 			headers["X-Twilio-RecordingSid"] == "RE3f460611a574b29e327b2a8acbff28d0" {
