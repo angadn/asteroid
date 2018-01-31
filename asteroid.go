@@ -78,8 +78,17 @@ func (watch *SIPHeaderWatch) Start() {
 					}
 				} else {
 					if len(callID) > 0 {
-						// Fire callback
-						watch.cb(callID, headerValues)
+						// Fire callback if all headers are present
+						allHeadersPresent := true
+						for _, h := range watch.headers {
+							if len(headerValues[h]) <= 0 {
+								allHeadersPresent = false
+							}
+						}
+
+						if allHeadersPresent {
+							watch.cb(callID, headerValues)
+						}
 
 						// Reset our state
 						callID = ""
