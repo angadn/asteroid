@@ -17,7 +17,9 @@ type SIPHeaderWatch struct {
 	cb           func(callID string, headers map[string]string)
 
 	// Internals
-	reader io.Reader
+	reader    io.Reader
+	cmd       *exec.Cmd
+	isStopped bool
 }
 
 // NewSIPHeaderWatch for a set of headers to watch for, and a callback to run when a call
@@ -30,6 +32,7 @@ func NewSIPHeaderWatch(
 		asteriskPath: "/usr/sbin/asterisk",
 		headers:      headersToWatch,
 		cb:           callback,
+		isStopped:    false,
 	}
 	return ret
 }
@@ -48,10 +51,10 @@ func (watch *SIPHeaderWatch) SetReader(reader io.Reader) {
 func (watch *SIPHeaderWatch) Start() error {
 	var err error
 	if watch.reader == nil {
-		cmd := exec.Command(watch.asteriskPath, "-r")
-		watch.reader, err = cmd.StdoutPipe()
+		watch.cmd = exec.Command(watch.asteriskPath, "-r")
+		watch.reader, err = watch.cmd.StdoutPipe()
 		if err == nil {
-			err = cmd.Start()
+			err = watch.cmd.Start()
 		}
 	}
 
@@ -64,11 +67,9 @@ func (watch *SIPHeaderWatch) Start() error {
 			)
 
 			headerValues = make(map[string]string)
-			var e error
 			LINES := ""
-			for e == nil {
+			for !watch.isStopped {
 				s.Scan()
-				e = s.Err()
 				line := s.Text()
 				LINES += "\n" + line
 				if len(line) > 0 {
@@ -109,4 +110,12 @@ func (watch *SIPHeaderWatch) Start() error {
 	}
 
 	return err
+}
+
+// Stop kills our underlying `asterisk -r`.
+func (watch *SIPHeaderWatch) Stop() {
+	watch.isStopped = true
+	if watch.cmd != nil {
+		watch.cmd.Process.Kill()
+	}
 }
