@@ -48,7 +48,7 @@ func (watch *SIPHeaderWatch) Start() {
 	var err error
 	if watch.reader == nil {
 		cmd := exec.Command(watch.asteriskPath, "-r")
-		if err = cmd.Run(); err == nil {
+		if err = cmd.Start(); err == nil {
 			watch.reader, err = cmd.StdoutPipe()
 		}
 	}
