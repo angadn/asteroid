@@ -44,7 +44,7 @@ func (watch *SIPHeaderWatch) SetReader(reader io.Reader) {
 }
 
 // Start watching for headers.
-func (watch *SIPHeaderWatch) Start() {
+func (watch *SIPHeaderWatch) Start() error {
 	var err error
 	if watch.reader == nil {
 		cmd := exec.Command(watch.asteriskPath, "-r")
@@ -98,4 +98,6 @@ func (watch *SIPHeaderWatch) Start() {
 			}
 		}()
 	}
+
+	return err
 }
