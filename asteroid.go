@@ -63,7 +63,10 @@ func (watch *SIPHeaderWatch) Start() error {
 			)
 
 			headerValues = make(map[string]string)
-			for s.Scan() {
+			var e error
+			for e == nil {
+				s.Scan()
+				e = s.Err()
 				line := s.Text()
 				if len(line) > 0 {
 					if len(callID) == 0 {
