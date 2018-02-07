@@ -69,38 +69,39 @@ func (watch *SIPHeaderWatch) Start() error {
 			headerValues = make(map[string]string)
 			LINES := ""
 			for !watch.isStopped {
-				s.Scan()
-				line := s.Text()
-				LINES += "\n" + line
-				if len(line) > 0 {
-					if len(callID) == 0 {
-						fmt.Sscanf(line, "Call-ID: %s", &callID)
+				if s.Scan() {
+					line := s.Text()
+					LINES += "\n" + line
+					if len(line) > 0 {
+						if len(callID) == 0 {
+							fmt.Sscanf(line, "Call-ID: %s", &callID)
+						} else {
+							for _, key := range watch.headers {
+								var val string
+								if fmt.Sscanf(line, key+": %s", &val); len(val) > 0 {
+									headerValues[key] = val
+									break
+								}
+							}
+						}
 					} else {
-						for _, key := range watch.headers {
-							var val string
-							if fmt.Sscanf(line, key+": %s", &val); len(val) > 0 {
-								headerValues[key] = val
-								break
+						if len(callID) > 0 {
+							// Fire callback if all headers are present
+							allHeadersPresent := true
+							for _, h := range watch.headers {
+								if len(headerValues[h]) <= 0 {
+									allHeadersPresent = false
+								}
 							}
-						}
-					}
-				} else {
-					if len(callID) > 0 {
-						// Fire callback if all headers are present
-						allHeadersPresent := true
-						for _, h := range watch.headers {
-							if len(headerValues[h]) <= 0 {
-								allHeadersPresent = false
+
+							if allHeadersPresent {
+								watch.cb(callID, headerValues)
 							}
-						}
 
-						if allHeadersPresent {
-							watch.cb(callID, headerValues)
+							// Reset our state
+							callID = ""
+							headerValues = make(map[string]string)
 						}
-
-						// Reset our state
-						callID = ""
-						headerValues = make(map[string]string)
 					}
 				}
 			}
