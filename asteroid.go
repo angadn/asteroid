@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os/exec"
 )
 
@@ -67,11 +66,9 @@ func (watch *SIPHeaderWatch) Start() error {
 			)
 
 			headerValues = make(map[string]string)
-			LINES := ""
 			for !watch.isStopped {
 				if s.Scan() {
 					line := s.Text()
-					LINES += "\n" + line
 					if len(line) > 0 {
 						if len(callID) == 0 {
 							fmt.Sscanf(line, "Call-ID: %s", &callID)
@@ -105,8 +102,6 @@ func (watch *SIPHeaderWatch) Start() error {
 					}
 				}
 			}
-
-			ioutil.WriteFile("/tmp/asteroid-lines", []byte(LINES), 0644)
 		}()
 	}
 
