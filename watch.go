@@ -11,7 +11,7 @@ import (
 type Watch struct {
 	// Config
 	asteriskPath string
-	OnLine       func(line string)
+	onLine       func(line string)
 
 	// Internals
 	reader    io.Reader
@@ -56,7 +56,7 @@ func (watch *Watch) Start() error {
 			for !watch.isStopped {
 				if s.Scan() {
 					line := s.Text()
-					watch.OnLine(line)
+					watch.onLine(line)
 				}
 			}
 		}()

@@ -27,7 +27,7 @@ func NewSIPHeaderWatch(
 
 	headerValues = make(map[string]string)
 
-	watch.OnLine = func(line string) {
+	watch.onLine = func(line string) {
 		if len(line) > 0 {
 			if len(callID) == 0 {
 				fmt.Sscanf(line, "Call-ID: %s", &callID)
