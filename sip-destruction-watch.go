@@ -6,7 +6,6 @@ import (
 
 // SIPDestructionWatch watches for SIP Dialogs being 'really destroyed'.
 type SIPDestructionWatch struct {
-	// Internals
 	Watch
 }
 

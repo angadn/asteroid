@@ -7,11 +7,6 @@ import (
 // SIPHeaderWatch watches for SIP Debug messages and fires a callback for all calls
 // observed.
 type SIPHeaderWatch struct {
-	// Config
-	headers []string
-	cb      func(callID string, headers map[string]string)
-
-	// Internals
 	Watch
 }
 
@@ -22,9 +17,7 @@ func NewSIPHeaderWatch(
 	callback func(callID string, headers map[string]string),
 ) SIPHeaderWatch {
 	watch := SIPHeaderWatch{
-		Watch:   NewWatch(),
-		headers: headersToWatch,
-		cb:      callback,
+		Watch: NewWatch(),
 	}
 
 	var (
@@ -39,7 +32,7 @@ func NewSIPHeaderWatch(
 			if len(callID) == 0 {
 				fmt.Sscanf(line, "Call-ID: %s", &callID)
 			} else {
-				for _, key := range watch.headers {
+				for _, key := range headersToWatch {
 					var val string
 					if fmt.Sscanf(line, key+": %s", &val); len(val) > 0 {
 						headerValues[key] = val
@@ -51,14 +44,14 @@ func NewSIPHeaderWatch(
 			if len(callID) > 0 {
 				// Fire callback if all headers are present
 				allHeadersPresent := true
-				for _, h := range watch.headers {
+				for _, h := range headersToWatch {
 					if len(headerValues[h]) <= 0 {
 						allHeadersPresent = false
 					}
 				}
 
 				if allHeadersPresent {
-					watch.cb(callID, headerValues)
+					callback(callID, headerValues)
 				}
 
 				// Reset our state
