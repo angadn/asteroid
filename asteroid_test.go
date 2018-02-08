@@ -30,6 +30,24 @@ func TestSIPHeaderWatch(t *testing.T) {
 	}
 }
 
+func TestSIPDestructionWatch(t *testing.T) {
+	passed := false
+	w := asteroid.NewSIPDestructionWatch(func(callID string) {
+		if callID == "3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060" {
+			passed = true
+		} else {
+			passed = false
+		}
+	})
+
+	w.SetReader(bytes.NewReader([]byte(asteriskLogs)))
+	w.Start()
+	time.Sleep(100 * time.Millisecond)
+	if !passed {
+		t.Fail()
+	}
+}
+
 const asteriskLogs = `Asterisk 11.13.1~dfsg-2+deb8u4, Copyright (C) 1999 - 2013 Digium, Inc. and others.
 Created by Mark Spencer <markster@digium.com>
 Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
