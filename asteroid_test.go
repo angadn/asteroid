@@ -25,6 +25,7 @@ func TestSIPHeaderWatch(t *testing.T) {
 	w.SetReader(bytes.NewReader([]byte(asteriskLogs)))
 	w.Start()
 	time.Sleep(100 * time.Millisecond)
+	w.Stop()
 	if !passed {
 		t.Fail()
 	}
@@ -43,6 +44,7 @@ func TestSIPDestructionWatch(t *testing.T) {
 	w.SetReader(bytes.NewReader([]byte(asteriskLogs)))
 	w.Start()
 	time.Sleep(100 * time.Millisecond)
+	w.Stop()
 	if !passed {
 		t.Fail()
 	}
