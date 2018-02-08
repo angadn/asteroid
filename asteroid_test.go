@@ -25,6 +25,26 @@ func TestSIPHeaderWatch(t *testing.T) {
 	w.SetReader(bytes.NewReader([]byte(asteriskLogs)))
 	w.Start()
 	time.Sleep(100 * time.Millisecond)
+	w.Stop()
+	if !passed {
+		t.Fail()
+	}
+}
+
+func TestSIPDestructionWatch(t *testing.T) {
+	passed := false
+	w := asteroid.NewSIPDestructionWatch(func(callID string) {
+		if callID == "3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060" {
+			passed = true
+		} else {
+			passed = false
+		}
+	})
+
+	w.SetReader(bytes.NewReader([]byte(asteriskLogs)))
+	w.Start()
+	time.Sleep(100 * time.Millisecond)
+	w.Stop()
 	if !passed {
 		t.Fail()
 	}
