@@ -15,7 +15,7 @@ func NewSIPDestructionWatch(callback func(callID string)) SIPDestructionWatch {
 		Watch: NewWatch(),
 	}
 
-	// TODO: Modify to watch CSeq: 1* BYE
+	// TODO: Modify to watch CSeq: 1* BYE, or maybe Reason?
 	watch.onLine = func(line string) {
 		var callID string
 		if fmt.Sscanf(
