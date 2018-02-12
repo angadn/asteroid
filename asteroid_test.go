@@ -71,6 +71,15 @@ func TestSIPDestructionWatch(t *testing.T) {
 	}
 }
 
+/************************************************
+*					WARNING						*
+* These logs are imperfect. They don't contain  *
+* terminal-markup. 								*
+* eg. "[OKReally destroying SIP dialog..."		*
+* If a test-case succeeds but deployment fails, *
+* this is probably why!							*
+*************************************************/
+
 const asteriskLogs = `Asterisk 11.13.1~dfsg-2+deb8u4, Copyright (C) 1999 - 2013 Digium, Inc. and others.
 Created by Mark Spencer <markster@digium.com>
 Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
