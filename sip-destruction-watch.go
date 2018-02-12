@@ -19,11 +19,10 @@ func NewSIPDestructionWatch(callback func(callID string)) SIPDestructionWatch {
 	watch.onLine = func(line string) {
 		var callID string
 		if fmt.Sscanf(
-			line, "Really destroying SIP dialog %s Method: INVITE", &callID,
+			line, "Really destroying SIP dialog %s Method:", &callID,
 		); len(callID) > 0 {
 			callback(callID[1 : len(callID)-1])
 		}
-
 	}
 
 	return watch
