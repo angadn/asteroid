@@ -121,4 +121,5 @@ Content-Length: 0
 
 <------------>
 [Jan 31 07:49:38] NOTICE[28951]: pbx_spool.c:402 attempt_thread: Call completed to SIP/twilio0/<<REMOVED>>
+[0KReally destroying SIP dialog '3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060' Method: BYE
 Really destroying SIP dialog '3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060' Method: BYE`
