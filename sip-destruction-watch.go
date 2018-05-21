@@ -2,6 +2,7 @@ package asteroid
 
 import (
 	"fmt"
+	"strings"
 )
 
 // SIPDestructionWatch watches for SIP Dialogs being 'really destroyed'.
@@ -17,11 +18,13 @@ func NewSIPDestructionWatch(callback func(callID string)) SIPDestructionWatch {
 
 	// TODO: Modify to watch CSeq: 1* BYE, or maybe Reason?
 	watch.onLine = func(line string) {
-		var callID string
-		if fmt.Sscanf(
-			line, "%s destroying SIP dialog %s Method:", &callID, &callID,
-		); len(callID) > 0 {
-			callback(callID[1 : len(callID)-1])
+		if strings.Contains(line, "destroying SIP dialog") {
+			var callID string
+			if fmt.Sscanf(
+				line, "%s destroying SIP dialog %s Method:", &callID, &callID,
+			); len(callID) > 0 {
+				callback(callID[1 : len(callID)-1])
+			}
 		}
 	}
 

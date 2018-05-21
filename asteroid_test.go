@@ -39,7 +39,7 @@ func TestSIPHeaderWatchForReason(t *testing.T) {
 		if callID == "3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060" {
 			passed = true
 		} else {
-			passed = false // If any message comes, it should contain all our headers!
+			t.Fail() // If any message comes, it should contain all our headers!
 		}
 	})
 
@@ -58,7 +58,7 @@ func TestSIPDestructionWatch(t *testing.T) {
 		if callID == "3ca63b4114c4730415f57b1b217d040e@35.197.101.20:5060" {
 			passed = true
 		} else {
-			passed = false
+			t.Fail()
 		}
 	})
 
